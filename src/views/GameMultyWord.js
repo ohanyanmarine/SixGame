@@ -1,28 +1,46 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
+import AnimatedProgressWheel from 'react-native-progress-wheel';
 
-export default function CurrentPlayer(props) {
+export default function GameMultyWord(props) {
+  const [seconds, setSeconds] = useState(10);
+
+  useEffect(() => {
+    let interval = null;
+    if (seconds > 0) {
+      interval = setInterval(() => {
+        setSeconds(seconds => seconds - 1);
+      }, 1000);
+      console.log(seconds);
+    } else if (seconds !== 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [seconds]);
+
+  useEffect(() => {
+    setTimeout(() => props.navigation.navigate('Answers'), 10000);
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.teams}>
-        <Text style={{fontSize: 25}}>Current Player Page</Text>
-      </View>
-      <View style={styles.buttons}>
-        <Button
-          title="START"
-          buttonStyle={{
-            backgroundColor: 'rgba(78, 116, 289, 1)',
-            borderRadius: 3,
-          }}
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 10,
-          }}
-          onPress={() => props.navigation.navigate('GameMultyWord')}
+        <Text style={{fontSize: 25}}>Game Multy Words</Text>
+        <AnimatedProgressWheel
+          size={80}
+          width={10}
+          progress={(0, 100)}
+          animateFromValue={0}
+          duration={10000}
+          color={'white'}
+          fullColor={'red'}
         />
+        <View style={styles.teams}>
+          <Text style={{fontSize: 25}}>{seconds}</Text>
+        </View>
       </View>
+
       <View style={{width: '100%', alignItems: 'center'}}>
         <Divider
           style={{width: '100%'}}

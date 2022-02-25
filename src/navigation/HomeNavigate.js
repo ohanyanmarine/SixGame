@@ -2,16 +2,16 @@ import * as React from 'react';
 import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from '../Views/HomeScreen';
-import HowToPlay from '../Views/HowToPlay';
-import CreateTeams from '../Views/CreateTeams';
-import SettingsScreen from '../Views/Settings';
-import TeamMembers from '../Views/TeamMembers';
-import CurrentPlayer from '../Views/CurrentPlayer';
-import GameMultyWord from '../Views/GameMultyWord';
-import GameSingleWord from '../Views/GameSingleWord';
-import Answers from '../Views/Answers';
-import EndGame from '../Views/EndGame';
+import HomeScreen from '../views/HomeScreen';
+import HowToPlay from '../views/HowToPlay';
+import CreateTeams from '../views/CreateTeams';
+import SettingsScreen from '../views/Settings';
+import TeamMembers from '../views/TeamMembers';
+import CurrentPlayer from '../views/CurrentPlayer';
+import GameMultyWord from '../views/GameMultyWord';
+import GameSingleWord from '../views/GameSingleWord';
+import Answers from '../views/Answers';
+import EndGame from '../views/EndGame';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +26,7 @@ function HomeNavigate() {
             headerShown: false,
             headerTransparent: false,
             animationEnabled: false,
+            title: '',
           }}
         />
         <Stack.Screen
@@ -41,36 +42,40 @@ function HomeNavigate() {
           name="CreateTeams"
           component={CreateTeams}
           options={{
-            headerShown: false,
+            // headerShown: false,
             headerTransparent: false,
             animationEnabled: false,
+            title: '',
           }}
         />
         <Stack.Screen
           name="Settings"
           component={SettingsScreen}
           options={{
-            headerShown: false,
+            //headerShown: false,
             headerTransparent: false,
             animationEnabled: false,
+            title: '',
           }}
         />
         <Stack.Screen
           name="TeamMembers"
           component={TeamMembers}
           options={{
-            headerShown: false,
+            //headerShown: false,
             headerTransparent: false,
             animationEnabled: false,
+            title: '',
           }}
         />
         <Stack.Screen
           name="CurrentPlayer"
           component={CurrentPlayer}
           options={{
-            headerShown: false,
+            //headerShown: false,
             headerTransparent: false,
             animationEnabled: false,
+            title: '',
           }}
         />
         <Stack.Screen
@@ -95,9 +100,10 @@ function HomeNavigate() {
           name="Answers"
           component={Answers}
           options={{
-            headerShown: false,
+            //headerShown: false,
             headerTransparent: false,
             animationEnabled: false,
+            title: '',
           }}
         />
         <Stack.Screen

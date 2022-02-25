@@ -189,6 +189,7 @@ android {
 }
 
 dependencies {
+    // implementation 'com.google.android.gms:play-services-ads:20.5.0'  <--This is for adMob
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules

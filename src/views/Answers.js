@@ -1,37 +1,32 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {View, StyleSheet, Text} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 
-export default function CreateTeams(props) {
+export default function Answers(props) {
+  const {t} = useTranslation()
   return (
     <View style={styles.container}>
+      <Text style={styles.teamName}>Right Answers</Text>
       <View style={styles.teams}>
         <View style={styles.teamRow}>
-          <Text style={styles.teamName}>Teame 1</Text>
-          <Icon name="team" size={30} />
+          <Text style={styles.teamName}>Word 1</Text>
+          <View style={{height: 30, width: 30, backgroundColor: 'grey'}}></View>
         </View>
         <View style={styles.teamRow}>
-          <Text style={styles.teamName}>Teame 2</Text>
-          <Icon name="team" size={30} />
+          <Text style={styles.teamName}>Word 2</Text>
+          <View style={{height: 30, width: 30, backgroundColor: 'grey'}}></View>
         </View>
-        <Button
-          title="ADD TEAM"
-          buttonStyle={{
-            backgroundColor: 'rgba(78, 116, 289, 1)',
-            borderRadius: 3,
-          }}
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 10,
-          }}
-          //onPress={}
-        />
+
+        <View style={styles.teamRow}>
+          <Text style={styles.teamName}>Points</Text>
+          <Text style={styles.teamName}>10</Text>
+        </View>
       </View>
       <View style={styles.buttons}>
         <Button
-          title="NEXT"
+          title={t('next')}
           buttonStyle={{
             backgroundColor: 'rgba(78, 116, 289, 1)',
             borderRadius: 3,
@@ -41,7 +36,7 @@ export default function CreateTeams(props) {
             marginHorizontal: 50,
             marginVertical: 10,
           }}
-          onPress={() => props.navigation.navigate('TeamMembers')}
+          onPress={() => props.navigation.navigate('EndGame')}
         />
       </View>
       <View style={{width: '100%', alignItems: 'center'}}>

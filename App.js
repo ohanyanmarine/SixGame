@@ -1,9 +1,14 @@
-import * as React from 'react';
-import {View, Text} from 'react-native';
-import HomeNavigate from './Navigation/HomeNavigate';
+import React, {useEffect} from 'react';
+import Main from './src/main';
+import {Provider as ReduxProvider} from 'react-redux';
+import store from './src/store/store';
 
 function App() {
-  return <HomeNavigate />;
+  return (
+    <ReduxProvider store={store}>
+      <Main />
+    </ReduxProvider>
+  );
 }
 
 export default App;
