@@ -15,17 +15,11 @@ import Modal from 'react-native-modal';
 import {Controller, useForm} from 'react-hook-form';
 import {
   addTeamMemberAction,
-  getTeamsAction,
   selectTeamAction,
-  setRemoveTeamMemberAction,
   getRemoveTeamMemberAction,
-} from '../store/actions';
-import {
-  changeTeamMemberNameAction,
-  getTeamMembersAction,
+  updateTeamMemberNameAction,
   selectTeamMemberAction,
-  setTeamMembersAction,
-} from '../store/actions/TeamAction';
+} from '../store/actions';
 
 export default function TeamMembers(props) {
   const {t} = useTranslation();
@@ -33,7 +27,7 @@ export default function TeamMembers(props) {
   const selected = useSelector(selectedTeam);
   const teams = useSelector(teamsSelector);
   const selectedMember = useSelector(selectMember);
-  console.log('teams', teams);
+
   const {
     control,
     handleSubmit,
@@ -51,20 +45,15 @@ export default function TeamMembers(props) {
   };
 
   const onSubmitAdd = data => {
-    console.log(data);
     if (data) {
-      dispatch(addTeamMemberAction(selected.id, data));
-      console.log('data after dispatch', data, teams);
+      dispatch(addTeamMemberAction(selected.id, {...data, id: Date.now()}));
     }
     toggleModalAdd();
   };
   const onSubmitChange = data => {
-    console.log(data);
-    if (selected) {
-      dispatch(
-        changeTeamMemberNameAction(selected.id, selectedMember.id, data.name),
-      );
-    }
+    dispatch(
+      updateTeamMemberNameAction(selected.id, selectedMember.id, data.name),
+    );
     toggleModalChange();
   };
 
@@ -75,19 +64,13 @@ export default function TeamMembers(props) {
         {teams.map((team, index) => {
           return (
             <View key={index}>
-              <TouchableOpacity
-                style={styles.teamRow}
-                onPress={() => {
-                  dispatch(selectTeamAction(team.id));
-                  console.log('selected', selected);
-                }}>
+              <TouchableOpacity style={styles.teamRow}>
                 <Text key={index} style={{fontSize: 30, fontWeight: 'bold'}}>
                   {team.team_Name}
                 </Text>
               </TouchableOpacity>
 
               {team.members.map((item, i) => {
-                console.log(item, 'item');
                 return (
                   <View
                     key={i}
@@ -98,18 +81,15 @@ export default function TeamMembers(props) {
                     }}>
                     <TouchableOpacity
                       onPress={() => {
+                        dispatch(selectTeamAction(team.id));
                         dispatch(selectTeamMemberAction(team.id, item.id));
-                        console.log('selectedMember ', selectedMember);
-
                         toggleModalChange();
                       }}>
                       <Text style={{fontSize: 25}}>{item.name}</Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity
                       onPress={() => {
-                        console.log('name for delete', item.id, team.id);
-                        dispatch(setRemoveTeamMemberAction(item.id, team.id));
+                        dispatch(getRemoveTeamMemberAction(item.id, team.id));
                       }}>
                       <Text style={{fontSize: 25}}>X</Text>
                     </TouchableOpacity>

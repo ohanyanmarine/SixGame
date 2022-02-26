@@ -9,8 +9,11 @@ const INIT_STATE = {
 export default (state = INIT_STATE, action) => {
   const {type, payload} = action;
   switch (type) {
+    case TeamTypes.SET_TEAMS:
+      return {...state, teams: payload};
+
     case TeamTypes.ADD_TEAM:
-      const newTeam = {...payload, id: Date.now(), members: []};
+      const newTeam = {...payload};
       return {...state, teams: [...state.teams, newTeam]};
 
     case TeamTypes.SELECT_TEAM:
@@ -42,12 +45,11 @@ export default (state = INIT_STATE, action) => {
 
     case TeamTypes.ADD_TEAM_MEMBER:
       const {id, user} = payload;
-      const newUser = {...user, id: Date.now()};
       const tmp = [...state.teams];
       const index = tmp.findIndex(item => {
         return item.id == id;
       });
-      tmp[index].members.push(newUser);
+      tmp[index].members.push(user);
       return {
         ...state,
         teams: tmp,
@@ -55,7 +57,6 @@ export default (state = INIT_STATE, action) => {
 
     case TeamTypes.SET_REMOVE_TEAM_MEMBER:
       const {memberId, teamId} = payload;
-      console.log('teamId, id= ', payload);
       const temp = [...state.teams];
       temp.map(team => {
         if (team.id == teamId) {

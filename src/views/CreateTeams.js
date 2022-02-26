@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  FlatList,
 } from 'react-native';
 import {Button, Divider, Input} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -16,13 +15,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   addTeamAction,
   getRemoveTeamAction,
-  getTeamsAction,
   selectTeamAction,
+  updateTeamNameAction,
 } from '../store/actions';
 import {Controller, useForm} from 'react-hook-form';
 import {selectedTeam, teamsSelector} from '../store/selectors';
-import {changeTeamNameAction} from '../store/actions/TeamAction';
-import {getData} from '../utils/localstorage';
 
 export default function CreateTeams(props) {
   const {t} = useTranslation();
@@ -45,27 +42,17 @@ export default function CreateTeams(props) {
   const selected = useSelector(selectedTeam);
 
   const onSubmitAdd = data => {
-    console.log(data);
     if (data) {
-      dispatch(addTeamAction(data));
-      console.log('data after dispatch', data, teams);
+      dispatch(addTeamAction({...data, id: Date.now(), members: []}));
     }
     toggleModalAdd();
   };
   const onSubmitChange = data => {
-    console.log(data);
     if (selected) {
-      dispatch(changeTeamNameAction(selected.id, data.team_Name));
+      dispatch(updateTeamNameAction(selected.id, data.team_Name));
     }
     toggleModalChange();
   };
-  useEffect(() => {
-    getData('team').then(res => {
-      if (res !== null) {
-        console.log('team from localestorage-------------------------', res);
-      }
-    });
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -77,14 +64,12 @@ export default function CreateTeams(props) {
               style={styles.teamRow}
               onPress={() => {
                 dispatch(selectTeamAction(team.id));
-                console.log('selected', selected);
                 toggleModalChange();
               }}>
               <Text style={styles.teamName}>{team.team_Name}</Text>
               <Icon name="team" size={30} />
               <TouchableOpacity
                 onPress={() => {
-                  console.log('name for delete', team.id, index);
                   dispatch(getRemoveTeamAction(team.id));
                 }}>
                 <Text>X</Text>

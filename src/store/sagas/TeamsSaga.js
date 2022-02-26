@@ -6,48 +6,66 @@ import {
   setRemoveTeamAction,
   setRemoveTeamMemberAction,
   setTeamsAction,
-  addTeamMemberAction,
+  changeTeamNameAction,
+  changeTeamMemberNameAction,
 } from '../actions';
-import {setTeamMembersAction} from '../actions/TeamAction';
 import {storeData, getData} from '../../utils/localstorage';
+
+function* initTeams() {
+  const teams = yield getData('teams');
+  yield put(setTeamsAction(teams ? teams : []));
+}
+
+function* store() {
+  const teams = yield select(state => state.teams.teams);
+  yield storeData('teams', teams);
+}
 
 function* addTeam({payload}) {
   try {
-    // const team = yield call(addTeamRequest, payload);
-    const team = yield put(setAddTeamAction(payload));
-    console.log('saga -- team=====--------', team);
-    yield storeData('team', team);
+    yield put(setAddTeamAction(payload));
+    yield store();
   } catch (error) {
     console.log(error);
   }
 }
 
 function* getRemoveTeam({payload}) {
-  console.log('removed team: ', payload);
   yield put(setRemoveTeamAction(payload));
+  yield store();
 }
 
 function* addTeamMember({payload}) {
   try {
-    // const team = yield call(addTeamRequest, payload);
-    const member = yield put(setAddTeamMemberAction(payload));
-    console.log('member=====', member);
+    yield put(setAddTeamMemberAction(payload));
+    yield store();
   } catch (error) {
     console.log(error);
   }
 }
-function* getRemoveTeamMember(payload) {
-  //const {memberId, teamId} = payload;
-  //console.log('removed member saga: ', {memberId, teamId});
+function* getRemoveTeamMember({payload}) {
   yield put(setRemoveTeamMemberAction(payload));
+  yield store();
+}
+
+function* updateTeam(payload) {
+  yield put(changeTeamNameAction(payload.payload));
+  yield store();
+}
+
+function* updateTeamMember(payload) {
+  yield put(changeTeamMemberNameAction(payload.payload));
+  yield store();
 }
 
 function* watchTeamsSaga() {
   yield takeLatest(TeamTypes.ADD_TEAM, addTeam);
   yield takeLatest(TeamTypes.GET_REMOVE_TEAM, getRemoveTeam);
-  //yield takeLatest(TeamTypes.ADD_TEAM_MEMBER, addTeamMember);
-  //yield takeLatest(TeamTypes.GET_TEAM_MEMBERS, getTeamMembars);
   yield takeLatest(TeamTypes.ADD_TEAM_MEMBER, addTeamMember);
   yield takeLatest(TeamTypes.GET_REMOVE_TEAM_MEMBER, getRemoveTeamMember);
+  yield takeLatest(TeamTypes.INIT_TEAMS, initTeams);
+  yield takeLatest(TeamTypes.UPDATE_TEAM_NAME, updateTeam);
+  yield takeLatest(TeamTypes.UPDATE_TEAM_MEMBER_NAME, updateTeamMember);
 }
+
 export {watchTeamsSaga};

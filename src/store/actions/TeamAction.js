@@ -1,5 +1,12 @@
 import {TeamTypes} from '../types';
 
+export const setTeamsAction = payload => {
+  return {
+    type: TeamTypes.SET_TEAMS,
+    payload,
+  };
+};
+
 export const addTeamAction = data => {
   return {
     type: TeamTypes.ADD_TEAM,
@@ -43,25 +50,29 @@ export const setAddTeamMemberAction = (id, user) => {
   };
 };
 export const getRemoveTeamMemberAction = (memberId, teamId) => {
-  console.log('payload in actin getRemoveTeamMemberAction', memberId, teamId);
   return {
     type: TeamTypes.GET_REMOVE_TEAM_MEMBER,
     payload: {memberId: memberId, teamId: teamId},
   };
 };
-export const setRemoveTeamMemberAction = (memberId, teamId) => {
-  console.log('payload in actin setRemoveTeamMemberAction', memberId, teamId);
+export const setRemoveTeamMemberAction = payload => {
   return {
     type: TeamTypes.SET_REMOVE_TEAM_MEMBER,
-    payload: {memberId: memberId, teamId: teamId},
+    payload, //: {memberId: memberId, teamId: teamId},
   };
 };
 
-export const changeTeamNameAction = (id, name) => {
-  console.log('id, name in action ', id, name);
+export const updateTeamNameAction = (id, name) => {
+  return {
+    type: TeamTypes.UPDATE_TEAM_NAME,
+    payload: {tId: id, name: name},
+  };
+};
+
+export const changeTeamNameAction = payload => {
   return {
     type: TeamTypes.CHANGE_TEAM_NAME,
-    payload: {tId: id, name: name},
+    payload, //: {tId: id, name: name},
   };
 };
 
@@ -72,17 +83,30 @@ export const selectTeamMemberAction = (teamId, memberId) => {
   };
 };
 
-export const changeTeamMemberNameAction = (
+export const updateTeamMemberNameAction = (
   changeTeamId,
   changeMemberId,
   name,
 ) => {
   return {
-    type: TeamTypes.CHANGE_TEAM_MEMBER_NAME,
+    type: TeamTypes.UPDATE_TEAM_MEMBER_NAME,
     payload: {
       changeTeamId: changeTeamId,
       changeMemberId: changeMemberId,
       changeName: name,
     },
+  };
+};
+
+export const changeTeamMemberNameAction = payload => {
+  return {
+    type: TeamTypes.CHANGE_TEAM_MEMBER_NAME,
+    payload,
+  };
+};
+
+export const initTeams = () => {
+  return {
+    type: TeamTypes.INIT_TEAMS,
   };
 };
