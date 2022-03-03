@@ -1,22 +1,21 @@
-import { WordTypes } from "../types";
+import {WordTypes} from '../types';
 
 const INIT_STATE = {
-  words: null,
-  selected: {},
+  words: [],
+  collection: [],
 };
 
 export default (state = INIT_STATE, action) => {
-  const { type, payload } = action;
+  const {type, payload} = action;
   switch (type) {
     case WordTypes.SET_WORDS:
-      return { ...state, words: payload };
-    case WordTypes.SELECT_WORD:
-        const word = state.words.find((item)=>{
-           return item.id === parseInt(payload);
-        })
-        return {...state, selected: word ? word : {}}
+      return {...state, words: payload};
+    case WordTypes.SELECT_WORD_COLLECTION:
+      const wordCollection = state.words.filter(item => {
+        return item.difficult === payload;
+      });
+      return {...state, collection: wordCollection};
     default:
-        return state;
+      return state;
   }
-  
 };

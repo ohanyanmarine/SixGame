@@ -2,9 +2,11 @@
     "translation": {
         "play": "Խաղալ",
         "howToPlay": "Ինչպես խաղալ",
-        "addTeam": "Ավելացնել",
+        "addTeam": "Ավելացնել թիմ",
         "next": "Հաջորդը",
-        "start": "Սկսել"
+        "start": "Սկսել",
+        "addMember": "Ավելացնել խաղացող",
+        "changeName": "Փոխել անունը"
         
 
 

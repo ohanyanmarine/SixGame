@@ -2,10 +2,11 @@
     "translation": {
         "play": "Играть",
         "howToPlay": "Как играть",
-        "addTeam": "Добавить",
+        "addTeam": "Добавить каманду",
         "next": "Следуюший",
-        "start": "Начать"
-
+        "start": "Начать",
+        "addMember": "Добавить игрока",
+        "changeName": "Изменить имя"
 
     }
 }

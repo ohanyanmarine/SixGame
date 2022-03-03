@@ -4,7 +4,9 @@
         "howToPlay": "How to play",
         "addTeam": "Add team",
         "next": "Next",
-        "start": "Start"
+        "start": "Start",
+        "addMember": "Add member",
+        "changeName": "Change name"
 
 
     }

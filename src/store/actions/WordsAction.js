@@ -13,9 +13,9 @@ export const setWordsAction = payload => {
   };
 };
 
-export const selectWordAction = id => {
+export const selectWordCollectionAction = payload => {
   return {
-    type: WordTypes.SELECT_WORD,
-    payload: id,
+    type: WordTypes.SELECT_WORD_COLLECTION,
+    payload,
   };
 };

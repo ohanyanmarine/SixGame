@@ -2,8 +2,8 @@ import {TeamTypes} from '../types';
 
 const INIT_STATE = {
   teams: [],
-  selected: {},
-  selectedMember: {},
+  selected: null,
+  filteredTeams: [],
 };
 
 export default (state = INIT_STATE, action) => {
@@ -17,13 +17,10 @@ export default (state = INIT_STATE, action) => {
       return {...state, teams: [...state.teams, newTeam]};
 
     case TeamTypes.SELECT_TEAM:
-      const team = state.teams.find(item => {
-        return item.id === parseInt(payload);
-      });
-      return {...state, selected: team ? team : {}};
+      return {...state, selected: payload};
 
     case TeamTypes.SET_REMOVE_TEAM:
-      const list = state.teams.filter(item => item.id != payload);
+      const list = state.teams.filter(item => item.id !== parseInt(payload));
       return {...state, teams: list};
 
     case TeamTypes.CHANGE_TEAM_NAME:
@@ -34,33 +31,24 @@ export default (state = INIT_STATE, action) => {
         }
         return {...item};
       });
-      return {
-        ...state,
-        teams: tmpTeams,
-        selected: {
-          ...state.selected,
-          team_Name: name,
-        },
-      };
+      return {...state, teams: tmpTeams};
 
     case TeamTypes.ADD_TEAM_MEMBER:
-      const {id, user} = payload;
       const tmp = [...state.teams];
       const index = tmp.findIndex(item => {
-        return item.id == id;
+        return item.id === parseInt(payload.teamId);
       });
-      tmp[index].members.push(user);
-      return {
-        ...state,
-        teams: tmp,
-      };
+      tmp[index].members.push(payload.user);
+      return {...state, teams: tmp};
 
     case TeamTypes.SET_REMOVE_TEAM_MEMBER:
       const {memberId, teamId} = payload;
       const temp = [...state.teams];
       temp.map(team => {
         if (team.id == teamId) {
-          team.members = team.members.filter(item => item.id != memberId);
+          team.members = team.members.filter(
+            item => item.id !== parseInt(memberId),
+          );
         }
         return {...team};
       });
@@ -68,35 +56,60 @@ export default (state = INIT_STATE, action) => {
 
     case TeamTypes.SELECT_TEAM_MEMBER:
       const {selectTeamId, selectMemberId} = payload;
-      const selectTeam = state.teams.find(item => {
-        return item.id === parseInt(selectTeamId);
-      });
-      const selectMember = selectTeam.members.find(item => {
-        return item.id === parseInt(selectMemberId);
-      });
-      return {...state, selectedMember: selectMember ? selectMember : {}};
+      return {
+        ...state,
+        selected: {teamId: selectTeamId, memberId: selectMemberId},
+      };
 
     case TeamTypes.CHANGE_TEAM_MEMBER_NAME:
-      const {changeTeamId, changeMemberId, changeName} = payload;
       const tmpMembers = [...state.teams];
       tmpMembers.map(team => {
-        if (team.id === parseInt(changeTeamId)) {
+        if (team.id == payload.teamId) {
           team.members.map(member => {
-            if (member.id === parseInt(changeMemberId)) {
-              member.name = changeName;
+            if (member.id == payload.memberId) {
+              member.name = payload.name;
             }
           });
         }
       });
-      return {
-        ...state,
-        teams: tmpMembers,
-        selectedMember: {
-          ...state.selectedMember,
-          name: changeName,
-        },
-      };
+      return {...state, teams: tmpMembers};
 
+    case TeamTypes.SET_CHECK:
+      const checked = state.teams.map(team => {
+        if (team.id === parseInt(payload)) {
+          team.check = !team.check;
+        }
+        return {...team};
+      });
+      return {...state, teams: checked};
+
+    case TeamTypes.SET_CHECK_MEMBER:
+      const checkedMember = [...state.teams];
+      checkedMember.map(team => {
+        if (team.id === parseInt(payload.idTeam)) {
+          team.members.map(member => {
+            if (member.id == parseInt(payload.idMember)) {
+              member.check = !member.check;
+            }
+          });
+        }
+      });
+      return {...state, teams: checkedMember};
+
+    case TeamTypes.CHOOSE_TEAMS:
+      const filtered = state.teams.filter(team => {
+        return team.check;
+      });
+      return {...state, filteredTeams: filtered};
+
+    case TeamTypes.CHOOSE_MEMBERS:
+      const gameTeams = [...state.teams];
+      gameTeams.map(team => {
+        team.members = team.members.filter(item => {
+          return item.check;
+        });
+      });
+      return {...state, teams: gameTeams};
     default:
       return state;
   }

@@ -7,13 +7,15 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {Button, Divider, Input} from 'react-native-elements';
+import {Button, Divider, Input, CheckBox} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useTranslation} from 'react-i18next';
 import Modal from 'react-native-modal';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   addTeamAction,
+  chooseTeamsAction,
+  getCheckAction,
   getRemoveTeamAction,
   selectTeamAction,
   updateTeamNameAction,
@@ -43,13 +45,15 @@ export default function CreateTeams(props) {
 
   const onSubmitAdd = data => {
     if (data) {
-      dispatch(addTeamAction({...data, id: Date.now(), members: []}));
+      dispatch(
+        addTeamAction({...data, id: Date.now(), members: [], check: false}),
+      );
     }
     toggleModalAdd();
   };
   const onSubmitChange = data => {
     if (selected) {
-      dispatch(updateTeamNameAction(selected.id, data.team_Name));
+      dispatch(updateTeamNameAction(selected, data.team_Name));
     }
     toggleModalChange();
   };
@@ -59,22 +63,27 @@ export default function CreateTeams(props) {
       <View style={styles.teams}>
         <ScrollView>
           {teams.map((team, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.teamRow}
-              onPress={() => {
-                dispatch(selectTeamAction(team.id));
-                toggleModalChange();
-              }}>
-              <Text style={styles.teamName}>{team.team_Name}</Text>
-              <Icon name="team" size={30} />
+            <View key={index} style={styles.teamRow}>
+              <CheckBox
+                checked={team.check}
+                onPress={() => dispatch(getCheckAction(team.id))}
+              />
+              <TouchableOpacity
+                //style={styles.teamRow}
+                onPress={() => {
+                  dispatch(selectTeamAction(team.id));
+                  toggleModalChange();
+                }}>
+                <Text style={styles.teamName}>{team.team_Name}</Text>
+                {/* <Icon name="team" size={30} /> */}
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
                   dispatch(getRemoveTeamAction(team.id));
                 }}>
-                <Text>X</Text>
+                <Text style={styles.teamName}>X</Text>
               </TouchableOpacity>
-            </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
         <Button
@@ -109,7 +118,7 @@ export default function CreateTeams(props) {
             )}
             name="team_Name"
           />
-          <Button title="Add team" onPress={handleSubmit(onSubmitAdd)} />
+          <Button title={t('addTeam')} onPress={handleSubmit(onSubmitAdd)} />
         </View>
       </Modal>
       <Modal isVisible={isModalVisibleChange}>
@@ -131,7 +140,7 @@ export default function CreateTeams(props) {
             name="team_Name"
           />
           <Button
-            title="Change team name"
+            title={t('changeName')}
             onPress={handleSubmit(onSubmitChange)}
           />
         </View>
@@ -149,7 +158,10 @@ export default function CreateTeams(props) {
             marginHorizontal: 50,
             marginVertical: 10,
           }}
-          onPress={() => props.navigation.navigate('TeamMembers')}
+          onPress={() => {
+            dispatch(chooseTeamsAction());
+            props.navigation.navigate('TeamMembers');
+          }}
         />
       </View>
       <View style={{width: '100%', alignItems: 'center'}}>

@@ -6,19 +6,25 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
-import {Button, Divider} from 'react-native-elements';
+import {Button, CheckBox, Divider} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectedTeam, selectMember, teamsSelector} from '../store/selectors';
 import Modal from 'react-native-modal';
 import {Controller, useForm} from 'react-hook-form';
+import {useDispatch, useSelector} from 'react-redux';
+import {choosenTeams, selectedTeam, teamsSelector} from '../store/selectors';
 import {
   addTeamMemberAction,
   selectTeamAction,
   getRemoveTeamMemberAction,
   updateTeamMemberNameAction,
   selectTeamMemberAction,
+  getCheckMemberAction,
+  chooseMembersAction,
+  setGameTeamsAction,
+  setTurnsAction,
+  setTurnAction,
 } from '../store/actions';
 
 export default function TeamMembers(props) {
@@ -26,7 +32,7 @@ export default function TeamMembers(props) {
   const dispatch = useDispatch();
   const selected = useSelector(selectedTeam);
   const teams = useSelector(teamsSelector);
-  const selectedMember = useSelector(selectMember);
+  const choosen = useSelector(choosenTeams);
 
   const {
     control,
@@ -46,13 +52,13 @@ export default function TeamMembers(props) {
 
   const onSubmitAdd = data => {
     if (data) {
-      dispatch(addTeamMemberAction(selected.id, {...data, id: Date.now()}));
+      dispatch(addTeamMemberAction(selected, {...data, id: Date.now()}));
     }
     toggleModalAdd();
   };
   const onSubmitChange = data => {
     dispatch(
-      updateTeamMemberNameAction(selected.id, selectedMember.id, data.name),
+      updateTeamMemberNameAction(selected.teamId, selected.memberId, data.name),
     );
     toggleModalChange();
   };
@@ -60,63 +66,73 @@ export default function TeamMembers(props) {
   return (
     <View style={styles.container}>
       <View style={styles.teams}>
-        {/* <Text style={{fontSize: 25}}>Create Team Members</Text> */}
-        {teams.map((team, index) => {
-          return (
-            <View key={index}>
-              <TouchableOpacity style={styles.teamRow}>
-                <Text key={index} style={{fontSize: 30, fontWeight: 'bold'}}>
-                  {team.team_Name}
-                </Text>
-              </TouchableOpacity>
+        <ScrollView>
+          {choosen.map((team, index) => {
+            return (
+              <View key={index}>
+                <TouchableOpacity style={styles.teamRow}>
+                  <Text key={index} style={{fontSize: 30, fontWeight: 'bold'}}>
+                    {team.team_Name}
+                  </Text>
+                </TouchableOpacity>
 
-              {team.members.map((item, i) => {
-                return (
-                  <View
-                    key={i}
-                    style={{
-                      marginHorizontal: 25,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        dispatch(selectTeamAction(team.id));
-                        dispatch(selectTeamMemberAction(team.id, item.id));
-                        toggleModalChange();
+                {team.members.map((item, i) => {
+                  return (
+                    <View
+                      key={i}
+                      style={{
+                        marginHorizontal: 25,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
                       }}>
-                      <Text style={{fontSize: 25}}>{item.name}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => {
-                        dispatch(getRemoveTeamMemberAction(item.id, team.id));
-                      }}>
-                      <Text style={{fontSize: 25}}>X</Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
-              <Button
-                title={t('addTeam')}
-                buttonStyle={{
-                  backgroundColor: 'rgba(78, 116, 289, 1)',
-                  borderRadius: 3,
-                }}
-                containerStyle={{
-                  width: 200,
-                  marginHorizontal: 50,
-                  marginVertical: 10,
-                }}
-                onPress={() => {
-                  dispatch(selectTeamAction(team.id));
-                  toggleModalAdd();
-                }}
-              />
-            </View>
-          );
-        })}
+                      <CheckBox
+                        checked={item.check}
+                        onPress={() => {
+                          dispatch(getCheckMemberAction(team.id, item.id));
+                        }}
+                      />
+                      <TouchableOpacity
+                        onPress={() => {
+                          dispatch(selectTeamAction(team.id));
+                          dispatch(selectTeamMemberAction(team.id, item.id));
+                          toggleModalChange();
+                        }}>
+                        <Text style={{fontSize: 25}}>{item.name}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          dispatch(getRemoveTeamMemberAction(item.id, team.id));
+                        }}>
+                        <Text style={{fontSize: 25}}>X</Text>
+                      </TouchableOpacity>
+                    </View>
+                  );
+                })}
+                <Button
+                  title={t('addMember')}
+                  buttonStyle={{
+                    backgroundColor: 'rgba(78, 116, 289, 1)',
+                    borderRadius: 3,
+                  }}
+                  containerStyle={{
+                    width: 200,
+                    marginHorizontal: 50,
+                    marginVertical: 10,
+                  }}
+                  onPress={() => {
+                    dispatch(selectTeamAction(team.id));
+                    toggleModalAdd();
+                  }}
+                />
+              </View>
+            );
+          })}
+        </ScrollView>
       </View>
-      <Modal isVisible={isModalVisibleAdd}>
+
+      <Modal
+        isVisible={isModalVisibleAdd}
+        onBackdropPress={() => setModalVisibleAdd(false)}>
         <View style={{backgroundColor: 'white'}}>
           {/* <Input placeholder="Enter team name" /> */}
           <Controller
@@ -134,10 +150,12 @@ export default function TeamMembers(props) {
             )}
             name="name"
           />
-          <Button title="Add team member" onPress={handleSubmit(onSubmitAdd)} />
+          <Button title={t('addMember')} onPress={handleSubmit(onSubmitAdd)} />
         </View>
       </Modal>
-      <Modal isVisible={isModalVisibleChange}>
+      <Modal
+        isVisible={isModalVisibleChange}
+        onBackdropPress={() => setModalVisibleChange(false)}>
         <View style={{backgroundColor: 'white'}}>
           {/* <Input placeholder="Enter team name" /> */}
           <Controller
@@ -155,7 +173,10 @@ export default function TeamMembers(props) {
             )}
             name="name"
           />
-          <Button title="Change name" onPress={handleSubmit(onSubmitChange)} />
+          <Button
+            title={t('changeName')}
+            onPress={handleSubmit(onSubmitChange)}
+          />
         </View>
       </Modal>
       <View style={styles.buttons}>
@@ -170,7 +191,13 @@ export default function TeamMembers(props) {
             marginHorizontal: 50,
             marginVertical: 10,
           }}
-          onPress={() => props.navigation.navigate('CurrentPlayer')}
+          onPress={() => {
+            dispatch(chooseMembersAction());
+            dispatch(setGameTeamsAction(choosen));
+            dispatch(setTurnsAction());
+            dispatch(setTurnAction());
+            props.navigation.navigate('Start');
+          }}
         />
       </View>
       <View style={{width: '100%', alignItems: 'center'}}>

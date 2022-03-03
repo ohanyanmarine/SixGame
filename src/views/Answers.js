@@ -1,11 +1,14 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import React, {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
 import {View, StyleSheet, Text} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/AntDesign';
+import {useDispatch} from 'react-redux';
+import {setNextTurnAction} from '../store/actions';
 
-export default function Answers(props) {
-  const {t} = useTranslation()
+export default function Answers() {
+  const {t} = useTranslation();
+  const dispatch = useDispatch();
+
   return (
     <View style={styles.container}>
       <Text style={styles.teamName}>Right Answers</Text>
@@ -36,7 +39,7 @@ export default function Answers(props) {
             marginHorizontal: 50,
             marginVertical: 10,
           }}
-          onPress={() => props.navigation.navigate('EndGame')}
+          onPress={() => dispatch(setNextTurnAction())} //props.navigation.navigate('EndGame')}
         />
       </View>
       <View style={{width: '100%', alignItems: 'center'}}>

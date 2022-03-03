@@ -12,6 +12,7 @@ import GameMultyWord from '../views/GameMultyWord';
 import GameSingleWord from '../views/GameSingleWord';
 import Answers from '../views/Answers';
 import EndGame from '../views/EndGame';
+import Start from '../views/StartGame';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,16 @@ function HomeNavigate() {
         <Stack.Screen
           name="TeamMembers"
           component={TeamMembers}
+          options={{
+            //headerShown: false,
+            headerTransparent: false,
+            animationEnabled: false,
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="Start"
+          component={Start}
           options={{
             //headerShown: false,
             headerTransparent: false,

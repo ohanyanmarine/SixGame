@@ -2,8 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
 import AnimatedProgressWheel from 'react-native-progress-wheel';
+import {useDispatch, useSelector} from 'react-redux';
+import {setChangeStageAction} from '../store/actions';
 
 export default function GameMultyWord(props) {
+  const dispatch = useDispatch();
   const [seconds, setSeconds] = useState(10);
 
   useEffect(() => {
@@ -12,15 +15,16 @@ export default function GameMultyWord(props) {
       interval = setInterval(() => {
         setSeconds(seconds => seconds - 1);
       }, 1000);
-      console.log(seconds);
+      console.log('seconds', seconds);
     } else if (seconds !== 0) {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
   }, [seconds]);
-
   useEffect(() => {
-    setTimeout(() => props.navigation.navigate('Answers'), 10000);
+    setTimeout(() => {
+      dispatch(setChangeStageAction());
+    }, 10000);
   }, []);
 
   return (
@@ -28,7 +32,7 @@ export default function GameMultyWord(props) {
       <View style={styles.teams}>
         <Text style={{fontSize: 25}}>Game Multy Words</Text>
         <AnimatedProgressWheel
-          size={80}
+          size={40}
           width={10}
           progress={(0, 100)}
           animateFromValue={0}

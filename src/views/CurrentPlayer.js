@@ -1,14 +1,34 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
+import {useDispatch, useSelector} from 'react-redux';
+import {setTurnsAction, setTurnAction, setStartAction} from '../store/actions';
+import {gameTurn} from '../store/selectors';
 
 export default function CurrentPlayer(props) {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
+  const turn = useSelector(gameTurn);
+
+  useEffect(() => {
+    dispatch(setTurnsAction());
+    dispatch(setTurnAction());
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.teams}>
-        <Text style={{fontSize: 25}}>Current Player Page</Text>
+        <Text style={{fontSize: 30, fontWeight: 'bold'}}>Current player</Text>
+        <View
+          style={{height: 300, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{fontSize: 25, fontWeight: 'bold'}}>
+            {turn.team_Name}
+          </Text>
+          <Text style={{fontSize: 25, fontWeight: 'bold'}}>
+            {turn.member_Name}
+          </Text>
+        </View>
       </View>
       <View style={styles.buttons}>
         <Button
@@ -22,7 +42,10 @@ export default function CurrentPlayer(props) {
             marginHorizontal: 50,
             marginVertical: 10,
           }}
-          onPress={() => props.navigation.navigate('GameMultyWord')}
+          onPress={() => {
+            dispatch(setStartAction());
+            // props.navigation.navigate('GameMultyWord');
+          }}
         />
       </View>
       <View style={{width: '100%', alignItems: 'center'}}>

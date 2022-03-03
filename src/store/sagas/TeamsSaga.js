@@ -8,6 +8,8 @@ import {
   setTeamsAction,
   changeTeamNameAction,
   changeTeamMemberNameAction,
+  setCheckAction,
+  setCheckMemberAction,
 } from '../actions';
 import {storeData, getData} from '../../utils/localstorage';
 
@@ -48,13 +50,22 @@ function* getRemoveTeamMember({payload}) {
   yield store();
 }
 
-function* updateTeam(payload) {
-  yield put(changeTeamNameAction(payload.payload));
+function* updateTeam({payload}) {
+  yield put(changeTeamNameAction(payload));
   yield store();
 }
 
-function* updateTeamMember(payload) {
-  yield put(changeTeamMemberNameAction(payload.payload));
+function* updateTeamMember({payload}) {
+  yield put(changeTeamMemberNameAction(payload));
+  yield store();
+}
+
+function* getCheck({payload}) {
+  yield put(setCheckAction(payload));
+  yield store();
+}
+function* getCheckMember({payload}) {
+  yield put(setCheckMemberAction(payload));
   yield store();
 }
 
@@ -66,6 +77,8 @@ function* watchTeamsSaga() {
   yield takeLatest(TeamTypes.INIT_TEAMS, initTeams);
   yield takeLatest(TeamTypes.UPDATE_TEAM_NAME, updateTeam);
   yield takeLatest(TeamTypes.UPDATE_TEAM_MEMBER_NAME, updateTeamMember);
+  yield takeLatest(TeamTypes.GET_CHECK, getCheck);
+  yield takeLatest(TeamTypes.GET_CHECK_MEMBER, getCheckMember);
 }
 
 export {watchTeamsSaga};
