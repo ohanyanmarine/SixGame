@@ -20,7 +20,8 @@ import {
   getRemoveTeamMemberAction,
   updateTeamMemberNameAction,
   selectTeamMemberAction,
-  getCheckMemberAction,
+  //getCheckMemberAction,
+  setCheckMemberAction,
   chooseMembersAction,
   setGameTeamsAction,
   setTurnsAction,
@@ -88,7 +89,7 @@ export default function TeamMembers(props) {
                       <CheckBox
                         checked={item.check}
                         onPress={() => {
-                          dispatch(getCheckMemberAction(team.id, item.id));
+                          dispatch(setCheckMemberAction(team.id, item.id));
                         }}
                       />
                       <TouchableOpacity
@@ -192,11 +193,7 @@ export default function TeamMembers(props) {
             marginVertical: 10,
           }}
           onPress={() => {
-            dispatch(chooseMembersAction());
-            dispatch(setGameTeamsAction(choosen));
-            dispatch(setTurnsAction());
-            dispatch(setTurnAction());
-            props.navigation.navigate('Start');
+            props.navigation.navigate('PlayingTeams');
           }}
         />
       </View>

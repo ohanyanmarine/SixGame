@@ -1,9 +1,11 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/AntDesign';
+import {useDispatch} from 'react-redux';
+import {resetGameAction} from '../store/actions';
 
 export default function EndGame(props) {
+  const dispatch = useDispatch();
   return (
     <View style={styles.container}>
       <Text style={[styles.teamName, {paddingVertical: 50}]}>Winner Team</Text>
@@ -34,7 +36,7 @@ export default function EndGame(props) {
             marginHorizontal: 20,
             marginVertical: 10,
           }}
-          onPress={() => props.navigation.navigate('CreateTeams')}
+          onPress={() => props.navigation.navigate('Home')}
         />
         <Button
           title="Home"
@@ -47,7 +49,10 @@ export default function EndGame(props) {
             marginHorizontal: 20,
             marginVertical: 10,
           }}
-          onPress={() => props.navigation.navigate('Home')}
+          onPress={() => {
+            dispatch(resetGameAction());
+            props.navigation.navigate('Main');
+          }}
         />
       </View>
       <View style={{width: '100%', alignItems: 'center'}}>

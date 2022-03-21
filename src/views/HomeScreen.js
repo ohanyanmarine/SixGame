@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet, Text, StatusBar} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -8,6 +8,7 @@ import RNPickerSelect from 'react-native-picker-select';
 
 export default function HomeScreen(props) {
   const {t, i18n} = useTranslation();
+
   return (
     <View style={styles.container}>
       <View style={styles.bgImage}>

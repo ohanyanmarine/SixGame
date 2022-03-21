@@ -15,7 +15,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   addTeamAction,
   chooseTeamsAction,
-  getCheckAction,
+  //getCheckAction,
+  setCheckAction,
   getRemoveTeamAction,
   selectTeamAction,
   updateTeamNameAction,
@@ -66,7 +67,7 @@ export default function CreateTeams(props) {
             <View key={index} style={styles.teamRow}>
               <CheckBox
                 checked={team.check}
-                onPress={() => dispatch(getCheckAction(team.id))}
+                onPress={() => dispatch(setCheckAction(team.id))}
               />
               <TouchableOpacity
                 //style={styles.teamRow}
@@ -100,7 +101,9 @@ export default function CreateTeams(props) {
           onPress={toggleModalAdd}
         />
       </View>
-      <Modal isVisible={isModalVisibleAdd}>
+      <Modal
+        isVisible={isModalVisibleAdd}
+        onBackdropPress={() => setModalVisibleAdd(false)}>
         <View style={{backgroundColor: 'white'}}>
           {/* <Input placeholder="Enter team name" /> */}
           <Controller
@@ -121,7 +124,9 @@ export default function CreateTeams(props) {
           <Button title={t('addTeam')} onPress={handleSubmit(onSubmitAdd)} />
         </View>
       </Modal>
-      <Modal isVisible={isModalVisibleChange}>
+      <Modal
+        isVisible={isModalVisibleChange}
+        onBackdropPress={() => setModalVisibleChange(false)}>
         <View style={{backgroundColor: 'white'}}>
           {/* <Input placeholder="Enter team name" /> */}
           <Controller

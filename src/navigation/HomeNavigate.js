@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../views/HomeScreen';
@@ -13,12 +12,14 @@ import GameSingleWord from '../views/GameSingleWord';
 import Answers from '../views/Answers';
 import EndGame from '../views/EndGame';
 import Start from '../views/StartGame';
+import PlayingTeams from '../views/PlayingTeams';
+import Main from '../Main';
 
 const Stack = createNativeStackNavigator();
 
 function HomeNavigate() {
   return (
-    <NavigationContainer>
+    <NavigationContainer independent={true}>
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
@@ -70,6 +71,16 @@ function HomeNavigate() {
           }}
         />
         <Stack.Screen
+          name="PlayingTeams"
+          component={PlayingTeams}
+          options={{
+            //headerShown: false,
+            headerTransparent: false,
+            animationEnabled: false,
+            title: '',
+          }}
+        />
+        <Stack.Screen
           name="Start"
           component={Start}
           options={{
@@ -79,7 +90,7 @@ function HomeNavigate() {
             title: '',
           }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="CurrentPlayer"
           component={CurrentPlayer}
           options={{
@@ -88,8 +99,8 @@ function HomeNavigate() {
             animationEnabled: false,
             title: '',
           }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="GameMultyWord"
           component={GameMultyWord}
           options={{
@@ -97,8 +108,8 @@ function HomeNavigate() {
             headerTransparent: false,
             animationEnabled: false,
           }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="GameSingleWord"
           component={GameSingleWord}
           options={{
@@ -106,8 +117,8 @@ function HomeNavigate() {
             headerTransparent: false,
             animationEnabled: false,
           }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="Answers"
           component={Answers}
           options={{
@@ -116,14 +127,25 @@ function HomeNavigate() {
             animationEnabled: false,
             title: '',
           }}
-        />
+        /> */}
         <Stack.Screen
           name="EndGame"
           component={EndGame}
           options={{
+            //headerShown: false,
+            headerTransparent: false,
+            animationEnabled: false,
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{
             headerShown: false,
             headerTransparent: false,
             animationEnabled: false,
+            title: '',
           }}
         />
       </Stack.Navigator>

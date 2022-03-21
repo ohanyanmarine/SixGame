@@ -1,47 +1,79 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
-import {Button, Divider} from 'react-native-elements';
-import AnimatedProgressWheel from 'react-native-progress-wheel';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Touchable,
+  TouchableOpacity,
+} from 'react-native';
+import {Divider} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
-import {setChangeStageAction} from '../store/actions';
+import {
+  getNewWordsAction,
+  selectWordAction,
+  setChangeStageAction,
+  setStartAction,
+} from '../store/actions';
+import {
+  gameCategories,
+  gameDifficulty,
+  gameWords,
+  selected,
+} from '../store/selectors';
+import Timer from './Timer';
 
-export default function GameMultyWord(props) {
+export default function GameMultyWord() {
   const dispatch = useDispatch();
-  const [seconds, setSeconds] = useState(10);
+  const [selectedColor, setSelectedColor] = useState('grey');
+  const game = useSelector(gameWords);
+  const selectedWords = useSelector(selected);
+  const difficulty = useSelector(gameDifficulty);
+  const categories = useSelector(gameCategories);
 
-  useEffect(() => {
-    let interval = null;
-    if (seconds > 0) {
-      interval = setInterval(() => {
-        setSeconds(seconds => seconds - 1);
-      }, 1000);
-      console.log('seconds', seconds);
-    } else if (seconds !== 0) {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [seconds]);
   useEffect(() => {
     setTimeout(() => {
-      dispatch(setChangeStageAction());
-    }, 10000);
+      dispatch(setChangeStageAction(difficulty));
+    }, 15000);
   }, []);
+
+  useEffect(() => {
+    for (let i = categories.length; i < 600; i += categories.length) {
+      if (selectedWords.length == i) {
+        dispatch(getNewWordsAction(difficulty));
+        setSelectedColor('grey');
+        console.log(i);
+      }
+    }
+  }, [selectedWords.length]);
 
   return (
     <View style={styles.container}>
       <View style={styles.teams}>
-        <Text style={{fontSize: 25}}>Game Multy Words</Text>
-        <AnimatedProgressWheel
-          size={40}
-          width={10}
-          progress={(0, 100)}
-          animateFromValue={0}
-          duration={10000}
-          color={'white'}
-          fullColor={'red'}
-        />
-        <View style={styles.teams}>
-          <Text style={{fontSize: 25}}>{seconds}</Text>
+        <Timer />
+        <View>
+          <Text style={{fontSize: 25, fontWeight: 'bold'}}>
+            {game.slice(-1)[0].player.name}
+          </Text>
+          <View style={{alignItems: 'center', marginVertical: 20}}>
+            {game.slice(-1)[0].words.map((word, i) => {
+              return (
+                <TouchableOpacity
+                  key={i}
+                  onPress={() => {
+                    dispatch(selectWordAction(word));
+                    setSelectedColor('green');
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 25,
+                      color: selectedColor,
+                    }}>
+                    {word.word}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </View>
       </View>
 

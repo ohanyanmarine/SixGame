@@ -3,18 +3,14 @@ import {useTranslation} from 'react-i18next';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
-import {setTurnsAction, setTurnAction, setStartAction} from '../store/actions';
-import {gameTurn} from '../store/selectors';
+import {setStartAction} from '../store/actions';
+import {gameDifficulty, gameTurn} from '../store/selectors';
 
 export default function CurrentPlayer(props) {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const turn = useSelector(gameTurn);
-
-  useEffect(() => {
-    dispatch(setTurnsAction());
-    dispatch(setTurnAction());
-  }, []);
+  const difficulty = useSelector(gameDifficulty);
 
   return (
     <View style={styles.container}>
@@ -26,7 +22,7 @@ export default function CurrentPlayer(props) {
             {turn.team_Name}
           </Text>
           <Text style={{fontSize: 25, fontWeight: 'bold'}}>
-            {turn.member_Name}
+            {turn.member_Name.name}
           </Text>
         </View>
       </View>
@@ -43,7 +39,7 @@ export default function CurrentPlayer(props) {
             marginVertical: 10,
           }}
           onPress={() => {
-            dispatch(setStartAction());
+            dispatch(setStartAction(difficulty));
             // props.navigation.navigate('GameMultyWord');
           }}
         />

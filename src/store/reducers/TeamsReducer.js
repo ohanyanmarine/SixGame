@@ -102,14 +102,6 @@ export default (state = INIT_STATE, action) => {
       });
       return {...state, filteredTeams: filtered};
 
-    case TeamTypes.CHOOSE_MEMBERS:
-      const gameTeams = [...state.teams];
-      gameTeams.map(team => {
-        team.members = team.members.filter(item => {
-          return item.check;
-        });
-      });
-      return {...state, teams: gameTeams};
     default:
       return state;
   }

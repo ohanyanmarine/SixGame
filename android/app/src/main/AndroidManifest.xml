@@ -21,6 +21,12 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+      
+      <!-- avelacrel em stexic -->
+      <meta-data android:name="com.facebook.sdk.ApplicationId"
+          android:value="@string/facebook_app_id"/>
+      <!-- stex -->
+
       <!-- <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"/> -->

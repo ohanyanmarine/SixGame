@@ -5,6 +5,12 @@ import {
   gameTurn,
   gameStage,
   gameIndex,
+  gameWords,
+  selected,
+  game,
+  gameDifficulty,
+  gameGoal,
+  gameCategories,
 } from './GameSelectors';
 
 export {
@@ -16,4 +22,10 @@ export {
   gameTurn,
   gameStage,
   gameIndex,
+  gameWords,
+  selected,
+  game,
+  gameDifficulty,
+  gameGoal,
+  gameCategories,
 };

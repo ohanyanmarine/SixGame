@@ -109,31 +109,15 @@ export const setCheckAction = payload => {
     payload,
   };
 };
-export const getCheckAction = payload => {
-  return {
-    type: TeamTypes.GET_CHECK,
-    payload,
-  };
-};
-export const getCheckMemberAction = (idTeam, idMember) => {
-  return {
-    type: TeamTypes.GET_CHECK_MEMBER,
-    payload: {idTeam: idTeam, idMember: idMember},
-  };
-};
-export const setCheckMemberAction = payload => {
+
+export const setCheckMemberAction = (idTeam, idMember) => {
   return {
     type: TeamTypes.SET_CHECK_MEMBER,
-    payload,
+    payload: {idTeam: idTeam, idMember: idMember},
   };
 };
 export const chooseTeamsAction = () => {
   return {
     type: TeamTypes.CHOOSE_TEAMS,
-  };
-};
-export const chooseMembersAction = () => {
-  return {
-    type: TeamTypes.CHOOSE_MEMBERS,
   };
 };

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SixGame</string>
+    <!-- avelacrel em es tox@ -->
+    <string name="facebook_app_id">com.sixgame</string>
 </resources>

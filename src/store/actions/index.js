@@ -1,4 +1,4 @@
-import {getWordsAction, setWordsAction} from './WordsAction';
+import {getSettingsAction, setSettingsAction} from './SettingAction';
 import {
   selectTeamAction,
   addTeamAction,
@@ -17,13 +17,9 @@ import {
   updateTeamMemberNameAction,
   changeTeamMemberNameAction,
   setCheckAction,
-  getCheckAction,
   chooseTeamsAction,
-  chooseMembersAction,
   setCheckMemberAction,
-  getCheckMemberAction,
 } from './TeamAction';
-import {getSettingsAction, setSettingsAction} from './SettingAction';
 import {
   setGameTeamsAction,
   setTurnsAction,
@@ -31,11 +27,23 @@ import {
   setStartAction,
   setChangeStageAction,
   setNextTurnAction,
+  chooseMembersAction,
+  resetGameAction,
+  selectWordAction,
+  getWordsAction,
+  setWordsAction,
+  getCategoriesAction,
+  setCategoriesAction,
+  setGameAction,
+  setDifficultyAction,
+  setGoalAction,
+  setNewWordsAction,
+  getNewWordsAction,
+  setNewTurnAction,
+  gameOverAction,
 } from './GameAction';
 
 export {
-  getWordsAction,
-  setWordsAction,
   selectTeamAction,
   addTeamAction,
   setAddTeamAction,
@@ -53,9 +61,7 @@ export {
   updateTeamMemberNameAction,
   changeTeamMemberNameAction,
   setCheckAction,
-  getCheckAction,
   setCheckMemberAction,
-  getCheckMemberAction,
   chooseTeamsAction,
   chooseMembersAction,
   getSettingsAction,
@@ -66,4 +72,17 @@ export {
   setStartAction,
   setChangeStageAction,
   setNextTurnAction,
+  resetGameAction,
+  selectWordAction,
+  getWordsAction,
+  setWordsAction,
+  getCategoriesAction,
+  setCategoriesAction,
+  setGameAction,
+  setDifficultyAction,
+  setGoalAction,
+  setNewWordsAction,
+  getNewWordsAction,
+  setNewTurnAction,
+  gameOverAction,
 };

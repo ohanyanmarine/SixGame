@@ -19,4 +19,4 @@ export const GET_CHECK = '@TeamTypes/GET_CHECK';
 export const SET_CHECK_MEMBER = '@TeamTypes/SET_CHECK_MEMBER';
 export const GET_CHECK_MEMBER = '@TeamTypes/GET_CHECK_MEMBER';
 export const CHOOSE_TEAMS = '@TeamTypes/CHOOSE_TEAMS';
-export const CHOOSE_MEMBERS = '@TeamTypes/CHOOSE_MEMBERS';
+export const SET_RESET_TEAMS = '@TeamTypes/SET_RESET_TEAMS';
