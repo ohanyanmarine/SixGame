@@ -24,6 +24,19 @@ export const selectTeamAction = payload => {
     payload,
   };
 };
+
+export const getOneTeamAction = payload => {
+  return {
+    type: TeamTypes.GET_ONE_TEAM,
+    payload,
+  };
+};
+export const setOneTeamAction = payload => {
+  return {
+    type: TeamTypes.SET_ONE_TEAM,
+    payload,
+  };
+};
 export const getRemoveTeamAction = payload => {
   return {
     type: TeamTypes.GET_REMOVE_TEAM,
@@ -37,6 +50,7 @@ export const setRemoveTeamAction = payload => {
   };
 };
 export const addTeamMemberAction = (id, user) => {
+  console.log(id, user, 'in action');
   return {
     type: TeamTypes.ADD_TEAM_MEMBER,
     payload: {teamId: id, user: user},
@@ -62,13 +76,13 @@ export const setRemoveTeamMemberAction = payload => {
 };
 export const updateTeamNameAction = (id, name) => {
   return {
-    type: TeamTypes.UPDATE_TEAM_NAME,
+    type: TeamTypes.UPDATE_NAME,
     payload: {tId: id, name: name},
   };
 };
 export const changeTeamNameAction = payload => {
   return {
-    type: TeamTypes.CHANGE_TEAM_NAME,
+    type: TeamTypes.CHANGE_NAME,
     payload,
   };
 };
@@ -78,26 +92,7 @@ export const selectTeamMemberAction = (teamId, memberId) => {
     payload: {selectTeamId: teamId, selectMemberId: memberId},
   };
 };
-export const updateTeamMemberNameAction = (
-  changeTeamId,
-  changeMemberId,
-  changeName,
-) => {
-  return {
-    type: TeamTypes.UPDATE_TEAM_MEMBER_NAME,
-    payload: {
-      teamId: changeTeamId,
-      memberId: changeMemberId,
-      name: changeName,
-    },
-  };
-};
-export const changeTeamMemberNameAction = payload => {
-  return {
-    type: TeamTypes.CHANGE_TEAM_MEMBER_NAME,
-    payload,
-  };
-};
+
 export const initTeams = () => {
   return {
     type: TeamTypes.INIT_TEAMS,

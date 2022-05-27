@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,23 +8,25 @@ import {
   ScrollView,
 } from 'react-native';
 import {Button, Divider, Input, CheckBox} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/AntDesign';
 import {useTranslation} from 'react-i18next';
 import Modal from 'react-native-modal';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   addTeamAction,
   chooseTeamsAction,
-  //getCheckAction,
   setCheckAction,
   getRemoveTeamAction,
-  selectTeamAction,
-  updateTeamNameAction,
+  initTeams,
+  getOneTeamAction,
 } from '../store/actions';
 import {Controller, useForm} from 'react-hook-form';
-import {selectedTeam, teamsSelector} from '../store/selectors';
+import {teamsSelector} from '../store/selectors';
+import ModalHooks from './ModalHooks';
 
 export default function CreateTeams(props) {
+  const {setModalVisibleAddTeam, toggleModalAddTeam, isModalVisibleAddTeam} =
+    ModalHooks();
+  const teams = useSelector(teamsSelector);
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const {
@@ -32,33 +34,17 @@ export default function CreateTeams(props) {
     handleSubmit,
     formState: {errors},
   } = useForm();
-  const [isModalVisibleAdd, setModalVisibleAdd] = useState(false);
-  const [isModalVisibleChange, setModalVisibleChange] = useState(false);
-
-  const toggleModalAdd = () => {
-    setModalVisibleAdd(!isModalVisibleAdd);
-  };
-  const toggleModalChange = () => {
-    setModalVisibleChange(!isModalVisibleChange);
-  };
-  const teams = useSelector(teamsSelector);
-  const selected = useSelector(selectedTeam);
 
   const onSubmitAdd = data => {
     if (data) {
-      dispatch(
-        addTeamAction({...data, id: Date.now(), members: [], check: false}),
-      );
+      dispatch(addTeamAction({...data, members: []}));
     }
-    toggleModalAdd();
-  };
-  const onSubmitChange = data => {
-    if (selected) {
-      dispatch(updateTeamNameAction(selected, data.team_Name));
-    }
-    toggleModalChange();
+    toggleModalAddTeam();
   };
 
+  useEffect(() => {
+    dispatch(initTeams());
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.teams}>
@@ -72,11 +58,10 @@ export default function CreateTeams(props) {
               <TouchableOpacity
                 //style={styles.teamRow}
                 onPress={() => {
-                  dispatch(selectTeamAction(team.id));
-                  toggleModalChange();
+                  dispatch(getOneTeamAction(team.id));
+                  props.navigation.navigate('OneTeam');
                 }}>
-                <Text style={styles.teamName}>{team.team_Name}</Text>
-                {/* <Icon name="team" size={30} /> */}
+                <Text style={styles.teamName}>{team.name}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -98,12 +83,12 @@ export default function CreateTeams(props) {
             marginHorizontal: 50,
             marginVertical: 10,
           }}
-          onPress={toggleModalAdd}
+          onPress={toggleModalAddTeam}
         />
       </View>
       <Modal
-        isVisible={isModalVisibleAdd}
-        onBackdropPress={() => setModalVisibleAdd(false)}>
+        isVisible={isModalVisibleAddTeam}
+        onBackdropPress={() => setModalVisibleAddTeam(false)}>
         <View style={{backgroundColor: 'white'}}>
           {/* <Input placeholder="Enter team name" /> */}
           <Controller
@@ -119,38 +104,11 @@ export default function CreateTeams(props) {
                 value={value}
               />
             )}
-            name="team_Name"
+            name="name"
           />
           <Button title={t('addTeam')} onPress={handleSubmit(onSubmitAdd)} />
         </View>
       </Modal>
-      <Modal
-        isVisible={isModalVisibleChange}
-        onBackdropPress={() => setModalVisibleChange(false)}>
-        <View style={{backgroundColor: 'white'}}>
-          {/* <Input placeholder="Enter team name" /> */}
-          <Controller
-            control={control}
-            // rules={{
-            //  required: true,
-            // }}
-            render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                // style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="team_Name"
-          />
-          <Button
-            title={t('changeName')}
-            onPress={handleSubmit(onSubmitChange)}
-          />
-        </View>
-      </Modal>
-
       <View style={styles.buttons}>
         <Button
           title={t('next')}

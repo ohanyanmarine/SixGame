@@ -1,72 +1,74 @@
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Touchable,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {Divider} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  getNewWordsAction,
-  selectWordAction,
-  setChangeStageAction,
-  setStartAction,
-} from '../store/actions';
+import {getNewWordsAction, selectWordAction} from '../store/actions';
 import {
   gameCategories,
   gameDifficulty,
-  gameWords,
+  gameItems,
   selected,
 } from '../store/selectors';
 import Timer from './Timer';
+import AnimatedProgressWheel from 'react-native-progress-wheel';
 
 export default function GameMultyWord() {
   const dispatch = useDispatch();
-  const [selectedColor, setSelectedColor] = useState('grey');
-  const game = useSelector(gameWords);
+  const game = useSelector(gameItems);
   const selectedWords = useSelector(selected);
   const difficulty = useSelector(gameDifficulty);
   const categories = useSelector(gameCategories);
+  const seconds = Timer();
 
   useEffect(() => {
-    setTimeout(() => {
-      dispatch(setChangeStageAction(difficulty));
-    }, 15000);
-  }, []);
-
-  useEffect(() => {
-    for (let i = categories.length; i < 600; i += categories.length) {
+    for (let i = categories.length; i < 80; i += categories.length) {
       if (selectedWords.length == i) {
         dispatch(getNewWordsAction(difficulty));
-        setSelectedColor('grey');
-        console.log(i);
       }
     }
   }, [selectedWords.length]);
 
+  let gameWords = game[game.length - 1].words;
+
   return (
     <View style={styles.container}>
       <View style={styles.teams}>
-        <Timer />
+        {/* <Timer /> */}
+        <Text style={{fontSize: 25}}>Game Multy Words</Text>
+        <AnimatedProgressWheel
+          size={40}
+          width={10}
+          progress={(0, 100)}
+          animateFromValue={0}
+          duration={10000}
+          color={'white'}
+          fullColor={'red'}
+        />
+        <View style={styles.teams}>
+          <Text style={{fontSize: 25}}>{seconds}</Text>
+        </View>
         <View>
           <Text style={{fontSize: 25, fontWeight: 'bold'}}>
-            {game.slice(-1)[0].player.name}
+            {game[game.length - 1].player.name}
           </Text>
           <View style={{alignItems: 'center', marginVertical: 20}}>
-            {game.slice(-1)[0].words.map((word, i) => {
+            {gameWords[gameWords.length - 1].map((word, i) => {
+              let s = selectedWords.find(item => {
+                return item.word.id == word.id;
+              });
+              const color = !s ? 'grey' : 'green';
               return (
                 <TouchableOpacity
                   key={i}
                   onPress={() => {
-                    dispatch(selectWordAction(word));
-                    setSelectedColor('green');
+                    if (!s) {
+                      dispatch(selectWordAction(word));
+                    }
                   }}>
                   <Text
                     style={{
                       fontSize: 25,
-                      color: selectedColor,
+                      color: color,
                     }}>
                     {word.word}
                   </Text>
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
   teams: {
     alignItems: 'center',
     width: '100%',
-    height: '80%',
+    //height: '80%',
   },
   buttons: {
     //backgroundColor: 'yellow',

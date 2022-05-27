@@ -1,15 +1,27 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Text, View, StyleSheet} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-import {gameTeams} from '../store/selectors';
+import {gameItems, gameTeams} from '../store/selectors';
 
 export default function TeamPoints() {
   const {t} = useTranslation();
   const navigation = useNavigation();
   const playingTeams = useSelector(gameTeams);
+  const game = useSelector(gameItems);
+
+  const getPoint = team => {
+    let result = 0;
+    for (let i = 0; i < game.length; i++) {
+      const element = game[i];
+      if (team.name === element.player.team) {
+        result += element.point;
+      }
+    }
+    return result;
+  };
 
   return (
     <View style={styles.container}>
@@ -17,9 +29,18 @@ export default function TeamPoints() {
       <View style={styles.teams}>
         {playingTeams.map((team, index) => {
           return (
-            <View key={index}>
+            <View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+              }}
+              key={index}>
               <Text style={{fontSize: 25, fontWeight: 'bold'}}>
-                {team.team_Name}
+                {team.name}
+              </Text>
+              <Text style={{fontSize: 25, fontWeight: 'bold'}}>
+                {getPoint(team)}
               </Text>
             </View>
           );

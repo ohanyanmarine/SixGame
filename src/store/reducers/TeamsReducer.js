@@ -4,6 +4,8 @@ const INIT_STATE = {
   teams: [],
   selected: null,
   filteredTeams: [],
+  team: {},
+  friends: [],
 };
 
 export default (state = INIT_STATE, action) => {
@@ -23,15 +25,18 @@ export default (state = INIT_STATE, action) => {
       const list = state.teams.filter(item => item.id !== parseInt(payload));
       return {...state, teams: list};
 
-    case TeamTypes.CHANGE_TEAM_NAME:
+    case TeamTypes.CHANGE_NAME:
       const {tId, name} = payload;
       const tmpTeams = state.teams.map(item => {
         if (item.id === parseInt(tId)) {
-          item.team_Name = name;
+          item.name = name;
         }
         return {...item};
       });
       return {...state, teams: tmpTeams};
+
+    case TeamTypes.SET_ONE_TEAM:
+      return {...state, team: payload};
 
     case TeamTypes.ADD_TEAM_MEMBER:
       const tmp = [...state.teams];
@@ -60,19 +65,6 @@ export default (state = INIT_STATE, action) => {
         ...state,
         selected: {teamId: selectTeamId, memberId: selectMemberId},
       };
-
-    case TeamTypes.CHANGE_TEAM_MEMBER_NAME:
-      const tmpMembers = [...state.teams];
-      tmpMembers.map(team => {
-        if (team.id == payload.teamId) {
-          team.members.map(member => {
-            if (member.id == payload.memberId) {
-              member.name = payload.name;
-            }
-          });
-        }
-      });
-      return {...state, teams: tmpMembers};
 
     case TeamTypes.SET_CHECK:
       const checked = state.teams.map(team => {

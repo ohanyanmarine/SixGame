@@ -1,11 +1,9 @@
 export const gameTeams = state => state.game.teams;
 export const gameTurns = state => state.game.turns;
-export const gameTurn = state => state.game.turn;
 export const gameStage = state => state.game.stage;
 export const gameIndex = state => state.game.index;
-export const gameWords = state => state.game.games;
+export const gameItems = state => state.game.games;
 export const selected = state => state.game.selectedWords;
-export const gamePoints = state => state.game.games.point;
 export const game = state => state.game.isGame;
 export const gameDifficulty = state => state.game.difficulty;
 export const gameGoal = state => state.game.goal;

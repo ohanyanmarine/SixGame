@@ -14,16 +14,15 @@ import {
   setTeamsAction,
   initTeams,
   updateTeamNameAction,
-  updateTeamMemberNameAction,
-  changeTeamMemberNameAction,
   setCheckAction,
   chooseTeamsAction,
   setCheckMemberAction,
+  setOneTeamAction,
+  getOneTeamAction,
 } from './TeamAction';
 import {
   setGameTeamsAction,
   setTurnsAction,
-  setTurnAction,
   setStartAction,
   setChangeStageAction,
   setNextTurnAction,
@@ -41,7 +40,22 @@ import {
   getNewWordsAction,
   setNewTurnAction,
   gameOverAction,
+  setCheckAnswersAction,
+  setPointsAction,
+  createGameAction,
 } from './GameAction';
+import {
+  registerAction,
+  loginAction,
+  authSuccessAction,
+  setErrorMessage,
+} from './AuthAction';
+import {
+  setFriendsAction,
+  setAddFriendAction,
+  initFriends,
+  addFriendAction,
+} from './FriendAction';
 
 export {
   selectTeamAction,
@@ -58,8 +72,6 @@ export {
   setTeamsAction,
   initTeams,
   updateTeamNameAction,
-  updateTeamMemberNameAction,
-  changeTeamMemberNameAction,
   setCheckAction,
   setCheckMemberAction,
   chooseTeamsAction,
@@ -68,7 +80,6 @@ export {
   setSettingsAction,
   setGameTeamsAction,
   setTurnsAction,
-  setTurnAction,
   setStartAction,
   setChangeStageAction,
   setNextTurnAction,
@@ -85,4 +96,17 @@ export {
   getNewWordsAction,
   setNewTurnAction,
   gameOverAction,
+  registerAction,
+  loginAction,
+  authSuccessAction,
+  setErrorMessage,
+  setFriendsAction,
+  setAddFriendAction,
+  initFriends,
+  addFriendAction,
+  setOneTeamAction,
+  getOneTeamAction,
+  setCheckAnswersAction,
+  setPointsAction,
+  createGameAction,
 };

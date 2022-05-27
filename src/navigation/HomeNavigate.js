@@ -14,6 +14,8 @@ import EndGame from '../views/EndGame';
 import Start from '../views/StartGame';
 import PlayingTeams from '../views/PlayingTeams';
 import Main from '../Main';
+import Friends from '../views/Friends';
+import OneTeam from '../views/OneTeam';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,14 +34,26 @@ function HomeNavigate() {
           }}
         />
         <Stack.Screen
+          name="Friends"
+          component={Friends}
+          options={{
+            //headerShown: false,
+            headerTransparent: false,
+            animationEnabled: false,
+            title: '',
+          }}
+        />
+        <Stack.Screen
           name="HowToPlay"
           component={HowToPlay}
           options={{
-            headerShown: false,
+            //headerShown: false,
             headerTransparent: false,
             animationEnabled: false,
+            title: '',
           }}
         />
+
         <Stack.Screen
           name="CreateTeams"
           component={CreateTeams}
@@ -55,6 +69,16 @@ function HomeNavigate() {
           component={SettingsScreen}
           options={{
             //headerShown: false,
+            headerTransparent: false,
+            animationEnabled: false,
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="OneTeam"
+          component={OneTeam}
+          options={{
+            // headerShown: false,
             headerTransparent: false,
             animationEnabled: false,
             title: '',

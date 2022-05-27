@@ -1,17 +1,23 @@
-import {teamsSelector, selectedTeam, choosenTeams} from './TeamSelector';
+import {
+  teamsSelector,
+  selectedTeam,
+  choosenTeams,
+  oneTeam,
+} from './TeamSelector';
+import {friendsSelector} from './FriendSelector';
 import {
   gameTeams,
   gameTurns,
-  gameTurn,
   gameStage,
   gameIndex,
-  gameWords,
+  gameItems,
   selected,
   game,
   gameDifficulty,
   gameGoal,
   gameCategories,
 } from './GameSelectors';
+import {isAuthSelector} from './AuthSelector';
 
 export {
   teamsSelector,
@@ -19,13 +25,15 @@ export {
   choosenTeams,
   gameTeams,
   gameTurns,
-  gameTurn,
   gameStage,
   gameIndex,
-  gameWords,
+  gameItems,
   selected,
   game,
   gameDifficulty,
   gameGoal,
   gameCategories,
+  isAuthSelector,
+  friendsSelector,
+  oneTeam,
 };

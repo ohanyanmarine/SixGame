@@ -1,7 +1,11 @@
 import {takeLatest, call, put, select} from 'redux-saga/effects';
 import {GameTypes} from '../types';
 import {storeData, getData} from '../../utils/localstorage';
-import {wordsRequest, categoriesRequest} from '../../services/api/routes/game';
+import {
+  wordsRequest,
+  categoriesRequest,
+  createGameRequest,
+} from '../../services/api/routes/game';
 import {
   setCategoriesAction,
   setGameAction,
@@ -14,7 +18,8 @@ function* getWords() {
   try {
     const words = yield call(wordsRequest);
     yield storeData('words', words.result);
-    yield put(setWordsAction(words.result));
+    const wordsInStore = yield getData('words');
+    yield put(setWordsAction(wordsInStore));
   } catch (error) {
     console.log(error);
   }
@@ -24,7 +29,8 @@ function* getCategories() {
   try {
     const categories = yield call(categoriesRequest);
     yield storeData('categories', categories.result);
-    yield put(setCategoriesAction(categories.result));
+    const categoriesInStore = yield getData('categories');
+    yield put(setCategoriesAction(categoriesInStore));
   } catch (error) {
     console.log(error);
   }
@@ -58,10 +64,8 @@ function* get6Words(difficulty) {
 }
 
 function* startGame({payload}) {
-  console.log('sagaaaaaaaaaa', payload);
   const difficulty = payload;
   const words = yield get6Words(difficulty);
-  console.log(words);
   yield put(
     setGameAction(words, difficulty),
     //   {type: 'SET_GAME',
@@ -89,20 +93,21 @@ function* nextTurn({payload}) {
   if (index >= members.length) {
     index = 0;
   }
-  yield put(
-    setNewTurnAction(words, index),
-    // {type: 'SET_NEW_TURN',
-    // payload: {
-    //   words,
-    //   index,
-    // }}
-  );
+  yield put(setNewTurnAction(words, index));
 }
+
+function* createGame({payload}) {
+  console.log(payload);
+  const game = yield call(createGameRequest, payload);
+  console.log(game, 'game');
+}
+
 function* watchWordsSaga() {
   yield takeLatest(GameTypes.GET_WORDS, getWords);
   yield takeLatest(GameTypes.GET_CATEGORIES, getCategories);
   yield takeLatest(GameTypes.START_GAME, startGame);
   yield takeLatest(GameTypes.GET_NEW_WORDS, newWords);
   yield takeLatest(GameTypes.NEXT_TURN, nextTurn);
+  yield takeLatest(GameTypes.CREATE_GAME, createGame);
 }
 export {watchWordsSaga};

@@ -13,12 +13,6 @@ export const setTurnsAction = () => {
   };
 };
 
-export const setTurnAction = () => {
-  return {
-    type: GameTypes.SET_TURN,
-  };
-};
-
 export const setStartAction = payload => {
   return {
     type: GameTypes.START_GAME,
@@ -140,5 +134,12 @@ export const gameOverAction = () => {
 export const setPointsAction = () => {
   return {
     type: GameTypes.SET_POINTS,
+  };
+};
+
+export const createGameAction = payload => {
+  return {
+    type: GameTypes.CREATE_GAME,
+    payload,
   };
 };

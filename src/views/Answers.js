@@ -1,23 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import {Button, CheckBox, Divider} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
-import {setNextTurnAction} from '../store/actions';
 import {
+  setNextTurnAction,
   setCheckAnswersAction,
   setPointsAction,
-} from '../store/actions/GameAction';
-import {selected} from '../store/selectors';
-import {gamePoints} from '../store/selectors/GameSelectors';
+} from '../store/actions';
+import {selected, gameItems} from '../store/selectors';
 
 export default function Answers() {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const selectedWords = useSelector(selected);
-  const points = useSelector(gamePoints);
-  console.log('Answers', selectedWords);
-  console.log('Points', points);
+  const game = useSelector(gameItems);
 
   useEffect(() => {
     dispatch(setPointsAction());
@@ -25,7 +22,7 @@ export default function Answers() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.teamName}>Points {points} </Text>
+      <Text style={styles.teamName}>Points {game[game.length - 1].point}</Text>
       <View style={styles.teams}>
         <ScrollView>
           {selectedWords.map((item, i) => {
@@ -63,7 +60,9 @@ export default function Answers() {
             marginHorizontal: 50,
             marginVertical: 10,
           }}
-          onPress={() => dispatch(setNextTurnAction())} //props.navigation.navigate('EndGame')}
+          onPress={() => {
+            dispatch(setNextTurnAction());
+          }}
         />
       </View>
       <View style={{width: '100%', alignItems: 'center'}}>

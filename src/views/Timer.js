@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
-import AnimatedProgressWheel from 'react-native-progress-wheel';
+import {useDispatch, useSelector} from 'react-redux';
+import {setChangeStageAction} from '../store/actions';
+import {gameDifficulty} from '../store/selectors';
 
 export default function Timer() {
-  const [seconds, setSeconds] = useState(15);
+  const [seconds, setSeconds] = useState(10);
+  const dispatch = useDispatch();
+  const difficulty = useSelector(gameDifficulty);
 
   useEffect(() => {
     let interval = null;
@@ -13,41 +16,11 @@ export default function Timer() {
       }, 1000);
     } else if (seconds !== 0) {
       clearInterval(interval);
+    } else if (seconds === 0) {
+      dispatch(setChangeStageAction(difficulty));
     }
     return () => clearInterval(interval);
   }, [seconds]);
 
-  return (
-    <View style={styles.teams}>
-      <Text style={{fontSize: 25}}>Game Multy Words</Text>
-      <AnimatedProgressWheel
-        size={40}
-        width={10}
-        progress={(0, 100)}
-        animateFromValue={0}
-        duration={15000}
-        color={'white'}
-        fullColor={'red'}
-      />
-      <View style={styles.teams}>
-        <Text style={{fontSize: 25}}>{seconds}</Text>
-      </View>
-    </View>
-  );
+  return seconds;
 }
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    //backgroundColor: 'red',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  teams: {
-    alignItems: 'center',
-    width: '100%',
-  },
-
-  teamName: {
-    fontSize: 25,
-  },
-});

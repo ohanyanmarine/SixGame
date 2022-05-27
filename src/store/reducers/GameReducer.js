@@ -3,16 +3,11 @@ import {GameTypes} from '../types';
 const INIT_STATE = {
   teams: [],
   turns: [],
-  turn: {
-    team_Name: '',
-    member_Name: '',
-  },
   stage: 0,
   index: 0,
   games: [],
   selectedWords: [],
   isGame: true,
-  words: [],
   categories: [],
   difficulty: null,
   goal: null,
@@ -35,29 +30,13 @@ export default (state = INIT_STATE, action) => {
 
     case GameTypes.SET_TURNS:
       const players = state.teams[0].members.reduce((acc, el, i) => {
-        acc.push(el, state.teams[1].members[i]);
+        acc.push(
+          {...el, team: state.teams[0].name},
+          {...state.teams[1].members[i], team: state.teams[1].name},
+        );
         return acc;
       }, []);
       return {...state, turns: players};
-
-    case GameTypes.SET_TURN:
-      let teamTurn = '';
-      if (state.index % 2 == 0) {
-        teamTurn = state.teams[0].team_Name;
-      } else {
-        teamTurn = state.teams[1].team_Name;
-      }
-      const memberTurn = state.turns.find((item, i) => {
-        if (i === state.index) return item;
-      });
-      return {
-        ...state,
-        turn: {
-          ...state.turn,
-          team_Name: teamTurn,
-          member_Name: memberTurn,
-        },
-      };
 
     case GameTypes.SET_WORDS:
       return {...state, words: payload};
@@ -67,9 +46,10 @@ export default (state = INIT_STATE, action) => {
 
     case GameTypes.SET_GAME:
       let tmp = [...state.games];
+      let index = state.index;
       tmp.push({
-        player: state.turn.member_Name,
-        words: payload.words,
+        player: state.turns[index],
+        words: [payload.words],
         difficulty: payload.difficulty,
         point: 0,
       });
@@ -77,7 +57,7 @@ export default (state = INIT_STATE, action) => {
 
     case GameTypes.SET_NEW_WORDS:
       let temp = [...state.games];
-      temp.slice(-1)[0].words = payload;
+      temp[temp.length - 1].words.push(payload);
       return {...state, games: temp};
 
     case GameTypes.CHANGE_STAGE:
@@ -105,7 +85,7 @@ export default (state = INIT_STATE, action) => {
       let checkedLength = state.selectedWords.filter(item => {
         return item.check === true;
       });
-      t.point = checkedLength.length;
+      t[t.length - 1].point = checkedLength.length;
       return {...state, games: t};
 
     case GameTypes.NEXT_TURN:

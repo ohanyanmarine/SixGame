@@ -1,6 +1,5 @@
 export const SET_GAME_TEAMS = '@GameTypes/SET_GAME_TEAMS';
 export const SET_TURNS = '@GameTypes/SET_TURNS';
-export const SET_TURN = '@GameTypes/SET_TURN';
 export const START_GAME = '@GameTypes/START_GAME';
 export const CHANGE_STAGE = '@GameTypes/CHANGE_STAGE';
 export const NEXT_TURN = '@GameTypes/NEXT_TURN';
@@ -20,3 +19,4 @@ export const GET_NEW_WORDS = '@GameTypes/GET_NEW_WORDS';
 export const SET_NEW_TURN = '@GameTypes/SET_NEW_TURN';
 export const GAME_OVER = '@GameTypes/GAME_OVER';
 export const SET_POINTS = '@GameTypes/SET_POINTS';
+export const CREATE_GAME = '@GameTypes/CREATE_GAME';

@@ -1,5 +1,6 @@
 import {takeLatest, call, put, select} from 'redux-saga/effects';
 import {TeamTypes} from '../types';
+import {storeData, getData} from '../../utils/localstorage';
 import {
   setAddTeamAction,
   setAddTeamMemberAction,
@@ -7,14 +8,23 @@ import {
   setRemoveTeamMemberAction,
   setTeamsAction,
   changeTeamNameAction,
-  changeTeamMemberNameAction,
+  selectTeamAction,
+  setOneTeamAction,
 } from '../actions';
-import {storeData, getData} from '../../utils/localstorage';
+import {
+  addMemberRequest,
+  addTeamRequest,
+  deleteMemberRequest,
+  deleteTeamRequest,
+  oneTeamRequest,
+  teamsRequest,
+  updateTeamRequest,
+} from '../../services/api/routes/teams';
 
 function* initTeams() {
   const teams = yield getData('teams');
-  console.log(teams, 'sagaaaaaaaaaaa');
-  yield put(setTeamsAction(teams ? teams : []));
+  const request = yield call(teamsRequest);
+  yield put(setTeamsAction(request ? request : teams));
 }
 
 function* store() {
@@ -23,8 +33,10 @@ function* store() {
 }
 
 function* addTeam({payload}) {
+  const team = payload;
   try {
-    yield put(setAddTeamAction(payload));
+    const newTeam = yield call(addTeamRequest, {name: team.name});
+    yield put(setAddTeamAction(newTeam));
     yield store();
   } catch (error) {
     console.log(error);
@@ -32,31 +44,45 @@ function* addTeam({payload}) {
 }
 
 function* getRemoveTeam({payload}) {
+  const deletedTeam = yield call(deleteTeamRequest, payload);
   yield put(setRemoveTeamAction(payload));
   yield store();
 }
 
+function* updateTeam({payload}) {
+  const updatedTeam = yield call(updateTeamRequest, payload);
+  yield put(changeTeamNameAction(updatedTeam));
+  yield store();
+}
+
+function* getOneTeam({payload}) {
+  try {
+    const team = yield call(oneTeamRequest, payload);
+    yield put(selectTeamAction(payload));
+    yield put(setOneTeamAction(team ? team : {}));
+    yield store();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function* addTeamMember({payload}) {
   try {
-    yield put(setAddTeamMemberAction(payload));
+    const newMember = yield call(addMemberRequest, payload);
+    yield put(setAddTeamMemberAction(newMember));
     yield store();
   } catch (error) {
     console.log(error);
   }
 }
 function* getRemoveTeamMember({payload}) {
-  yield put(setRemoveTeamMemberAction(payload));
-  yield store();
-}
-
-function* updateTeam({payload}) {
-  yield put(changeTeamNameAction(payload));
-  yield store();
-}
-
-function* updateTeamMember({payload}) {
-  yield put(changeTeamMemberNameAction(payload));
-  yield store();
+  try {
+    const removed = yield call(deleteMemberRequest, payload);
+    yield put(setRemoveTeamMemberAction(payload));
+    yield store();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function* watchTeamsSaga() {
@@ -65,8 +91,8 @@ function* watchTeamsSaga() {
   yield takeLatest(TeamTypes.ADD_TEAM_MEMBER, addTeamMember);
   yield takeLatest(TeamTypes.GET_REMOVE_TEAM_MEMBER, getRemoveTeamMember);
   yield takeLatest(TeamTypes.INIT_TEAMS, initTeams);
-  yield takeLatest(TeamTypes.UPDATE_TEAM_NAME, updateTeam);
-  yield takeLatest(TeamTypes.UPDATE_TEAM_MEMBER_NAME, updateTeamMember);
+  yield takeLatest(TeamTypes.UPDATE_NAME, updateTeam);
+  yield takeLatest(TeamTypes.GET_ONE_TEAM, getOneTeam);
 }
 
 export {watchTeamsSaga};

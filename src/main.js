@@ -2,12 +2,11 @@ import * as React from 'react';
 import {SafeAreaView} from 'react-native';
 import HomeNavigate from './navigation/HomeNavigate';
 import {useDispatch} from 'react-redux';
-import {getCategoriesAction, getWordsAction, initTeams} from './store/actions';
+import {getCategoriesAction, getWordsAction} from './store/actions';
 
 function Main() {
   const dispatch = useDispatch();
   React.useEffect(() => {
-    dispatch(initTeams());
     dispatch(getWordsAction());
     dispatch(getCategoriesAction());
   }, []);

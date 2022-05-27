@@ -1,23 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import RNPickerSelect from 'react-native-picker-select';
 import {choosenTeams, gameTeams} from '../store/selectors';
 import {
-  selectTeamAction,
-  selectTeamMemberAction,
   chooseMembersAction,
   setGameTeamsAction,
   setTurnsAction,
-  setTurnAction,
   setDifficultyAction,
 } from '../store/actions';
 
@@ -28,10 +19,9 @@ export default function PlayingTeams(props) {
   const playingTeams = useSelector(gameTeams);
 
   useEffect(() => {
-    dispatch(setGameTeamsAction(choosen));
-    dispatch(chooseMembersAction());
+    // dispatch(setGameTeamsAction(choosen));
+    // dispatch(chooseMembersAction());
     dispatch(setTurnsAction());
-    dispatch(setTurnAction());
   }, []);
 
   return (
@@ -41,12 +31,9 @@ export default function PlayingTeams(props) {
           {playingTeams.map((team, index) => {
             return (
               <View key={index}>
-                <TouchableOpacity style={styles.teamRow}>
-                  <Text style={{fontSize: 30, fontWeight: 'bold'}}>
-                    {team.team_Name}
-                  </Text>
-                </TouchableOpacity>
-
+                <Text style={{fontSize: 30, fontWeight: 'bold'}}>
+                  {team.name}
+                </Text>
                 {team.members.map((item, i) => {
                   return (
                     <View
@@ -56,13 +43,7 @@ export default function PlayingTeams(props) {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                       }}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          dispatch(selectTeamAction(team.id));
-                          dispatch(selectTeamMemberAction(team.id, item.id));
-                        }}>
-                        <Text style={{fontSize: 25}}>{item.name}</Text>
-                      </TouchableOpacity>
+                      <Text style={{fontSize: 25}}>{item.user.name}</Text>
                     </View>
                   );
                 })}
@@ -77,14 +58,17 @@ export default function PlayingTeams(props) {
               justifyContent: 'space-around',
             }}>
             <View>
-              <Text style={{fontSize: 30, fontWeight: 'bold'}}>Difficulty</Text>
+              <Text style={{fontSize: 20, fontWeight: 'bold'}}>Difficulty</Text>
               <View>
                 <RNPickerSelect
                   style={styles}
                   useNativeAndroidPickerStyle={false}
-                  placeholder={{}}
+                  placeholder={{
+                    label: 'Select difficulty...',
+                    value: null,
+                    color: '#9EA0A4',
+                  }}
                   onValueChange={value => {
-                    console.log(value);
                     dispatch(setDifficultyAction(value));
                   }}
                   items={[
@@ -96,7 +80,7 @@ export default function PlayingTeams(props) {
               </View>
             </View>
             <View>
-              <Text style={{fontSize: 30, fontWeight: 'bold'}}>Goal</Text>
+              <Text style={{fontSize: 20, fontWeight: 'bold'}}>Goal</Text>
               <View
                 style={{
                   flex: 1,
@@ -106,14 +90,17 @@ export default function PlayingTeams(props) {
                 <RNPickerSelect
                   style={styles}
                   useNativeAndroidPickerStyle={false}
-                  placeholder={{}}
+                  placeholder={{
+                    label: 'Select a goal...',
+                    value: null,
+                    color: '#9EA0A4',
+                  }}
                   onValueChange={value => dispatch(setGoalAction(value))}
                   items={[
                     {label: '50', value: 50},
                     {label: '100', value: 100},
                   ]}
                 />
-                <Text style={{fontSize: 20}}>Points</Text>
               </View>
             </View>
           </View>

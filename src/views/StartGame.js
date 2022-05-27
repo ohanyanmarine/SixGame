@@ -9,7 +9,6 @@ import TeamPoints from './TeamsPoints';
 export default function Start() {
   const stage = useSelector(gameStage);
   const isGame = useSelector(game);
-  console.log(isGame, 'isGame');
 
   if (!isGame) {
     return <TeamPoints />;
